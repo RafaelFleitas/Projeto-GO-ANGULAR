@@ -23,6 +23,9 @@ export class UserService {
     getUserByEmail(userEmail: string): Observable<User> {
         return this.http.get<User>(`${this.apiUrl}/getUserByEmail/${userEmail}`)
     }
+    getAllUsers(): Observable<User[]> {
+        return this.http.get<User[]>(`${this.apiUrl}/getAllUsers`)
+    }
     updateUser(userId: number, user: Omit<User, 'id'>): Observable<User> {
         return this.http.put<User>(`${this.apiUrl}/updateUser/${userId}`, user)
     }

@@ -1,1 +1,63 @@
-<p>user-list works!</p>
+<div class="min-h-screen bg-gray-100">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-600">Usuários</h1>
+      <button (click)="goToDashboard()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+        Voltar
+      </button>
+    </div>
+  </nav>
+
+  <!-- Conteúdo -->
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <!-- Loading -->
+     @if(isLoading){
+    <div class="text-center text-gray-600">
+      Carregando usuários...
+    </div>
+}
+
+    <!-- Erro -->
+    @if(errorMessage){
+    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4">
+      {{ errorMessage }}
+    </div>
+    }
+
+    <!-- Tabela -->
+     @if (!isLoading && !errorMessage){
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <table class="w-full text-left">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700">ID</th>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700">Nome</th>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700">Email</th>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700">Idade</th>
+          </tr>
+        </thead>
+        <tbody>
+            @for (user of users; track user.id){
+          <tr
+            class="border-b border-gray-100 hover:bg-gray-50 transition"
+          >
+            <td class="px-6 py-4 text-gray-600">{{ user.id }}</td>
+            <td class="px-6 py-4 text-gray-800 font-medium">{{ user.name }}</td>
+            <td class="px-6 py-4 text-gray-600">{{ user.email }}</td>
+            <td class="px-6 py-4 text-gray-600">{{ user.age }}</td>
+          </tr>
+        }
+        </tbody>
+      </table>
+
+      <!-- Empty state -->
+       @if(users.length === 0){
+      <div class="text-center text-gray-500 py-12">
+        Nenhum usuário cadastrado.
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>
