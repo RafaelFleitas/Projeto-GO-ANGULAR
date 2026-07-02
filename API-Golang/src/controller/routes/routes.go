@@ -11,6 +11,7 @@ func InitRoutes(r *gin.RouterGroup, userController controller.UserControllerInte
 
 	r.GET("/getUserById/:userId", model.MiddlewareVerifyToken, userController.FindUserByID)
 	r.GET("/getUserByEmail/:userEmail", model.MiddlewareVerifyToken, userController.FindUserByEmail)
+	r.GET("/getAllUsers", model.MiddlewareVerifyToken, userController.FindAllUsers)
 	r.POST("/createUser", userController.CreateUser)
 	r.PUT("/updateUser/:userId", userController.UpdateUser)
 	r.DELETE("/deleteUser/:userId", userController.DeleteUser)

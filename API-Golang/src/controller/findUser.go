@@ -77,3 +77,21 @@ func (uc *userControllerInterface) FindUserByEmail(c *gin.Context) {
 	c.JSON(http.StatusOK, view.ConvertDomainToResponse(userDomain))
 
 }
+
+func (uc *userControllerInterface) FindAllUsers(c *gin.Context) {
+	logger.Info("Init FindAllUsersController",
+		zap.String("journey", "FindAllUsers"),
+	)
+
+	usersDomain, err := uc.service.FindAllUsersService()
+	if err != nil {
+		c.JSON(err.Code, err)
+		return
+	}
+
+	logger.Info("FindAllUsersController successfully executed",
+		zap.String("journey", "FindAllUsers"),
+	)
+
+	c.JSON(http.StatusOK, view.ConvertDomainListToResponse(usersDomain))
+}

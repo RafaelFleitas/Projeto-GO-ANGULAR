@@ -13,3 +13,13 @@ func ConvertDomainToResponse(userDomain model.UserDomainInterface) response.User
 		Age:   userDomain.GetAge(),
 	}
 }
+
+func ConvertDomainListToResponse(usersDomain []model.UserDomainInterface) []response.UserResponse {
+	usersResponse := []response.UserResponse{}
+
+	for _, userDomain := range usersDomain {
+		usersResponse = append(usersResponse, ConvertDomainToResponse(userDomain))
+	}
+
+	return usersResponse
+}

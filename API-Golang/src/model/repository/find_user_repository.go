@@ -103,3 +103,36 @@ func (ur *userRepository) FindUserByEmailAndPasswordRepository(email, password s
 	return converter.ConvertEntityToDomain(userEntity), nil
 
 }
+
+func (ur *userRepository) FindAllUsersRepository() ([]model.UserDomainInterface, *rest_err.RestErr) {
+	logger.Info("Init FindAllUsers user repository")
+
+	rows, err := ur.databaseConnection.QueryContext(
+		context.Background(),
+		"SELECT id, name, email, password, age FROM users",
+	)
+
+	if err != nil {
+		logger.Error("Error trying to find all users", err)
+		return nil, rest_err.NewInternalServerError("Error trying to find all users")
+	}
+	defer rows.Close()
+
+	var users []model.UserDomainInterface
+
+	for rows.Next() {
+		userEntity := &entity.UserEntity{}
+
+		if err := rows.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age); err != nil {
+			logger.Error("Error trying to scan user", err)
+			return nil, rest_err.NewInternalServerError("Error trying to scan user")
+		}
+
+		users = append(users, converter.ConvertEntityToDomain(userEntity))
+	}
+
+	logger.Info("FindAllUsers repository executed successfully",
+		zap.String("journey", "FindAllUsers"))
+
+	return users, nil
+}
