@@ -11,7 +11,7 @@
           (click)="logout()"
           class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition cursor-pointer"
         >
-          Logout
+          Sair
         </button>
       </div>
     </div>
@@ -105,6 +105,35 @@
           Idade: <strong>{{ currentUser?.age }}</strong>
         </p>
       </div>
+
+      <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition">
+        <div class="flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-lg mb-4">
+            <!-- Icone visual -->
+          <svg
+            class="w-6 h-6 text-yellow-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            ></path>
+          </svg>
+        </div>
+        <!-- Texto -->
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">Atualizar Usuário</h3>
+        <p class="text-gray-600 text-sm mb-4">Atualize algumas informações do usuário no sistema</p>
+        <button
+          (click)="goToUpdateUser()"
+          class="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition cursor-pointer"
+        >
+          Acessar
+        </button>
+      </div>
+      
     </div>
   </div>
 </div>

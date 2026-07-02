@@ -43,4 +43,7 @@ export class Dashboard implements OnInit {
   goToCreateUser() {
     this.router.navigate(['/users/new'])
   }
+  goToUpdateUser() {
+    this.router.navigate(['/users/update'])
+  }
 }
