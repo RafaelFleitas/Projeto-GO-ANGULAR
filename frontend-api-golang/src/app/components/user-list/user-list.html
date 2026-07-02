@@ -12,21 +12,21 @@
   <!-- Conteúdo -->
   <div class="max-w-7xl mx-auto px-4 py-12">
     <!-- Loading -->
-     @if(isLoading){
+     @if(isLoading()){
     <div class="text-center text-gray-600">
       Carregando usuários...
     </div>
 }
 
     <!-- Erro -->
-    @if(errorMessage){
+    @if(errorMessage()){
     <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4">
-      {{ errorMessage }}
+      {{ errorMessage() }}
     </div>
     }
 
     <!-- Tabela -->
-     @if (!isLoading && !errorMessage){
+     @if (!isLoading() && !errorMessage()){
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
       <table class="w-full text-left">
         <thead class="bg-gray-50 border-b border-gray-200">
@@ -38,7 +38,7 @@
           </tr>
         </thead>
         <tbody>
-            @for (user of users; track user.id){
+            @for (user of users(); track user.id){
           <tr
             class="border-b border-gray-100 hover:bg-gray-50 transition"
           >
@@ -52,7 +52,7 @@
       </table>
 
       <!-- Empty state -->
-       @if(users.length === 0){
+       @if(users().length === 0){
       <div class="text-center text-gray-500 py-12">
         Nenhum usuário cadastrado.
       </div>

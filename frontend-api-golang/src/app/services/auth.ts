@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { User, LoginRequest } from '../models/user.model';
 import { tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+
+
 
 @Injectable({
     providedIn: 'root'
@@ -20,14 +23,22 @@ export class AuthService {
 
 
     //Faz o login do usuário e retorna um Observable<User> com os dados do usuário logado
-    login(email: string, password: string): Observable<User>{
+        login(email: string, password: string): Observable<User>{
         const request: LoginRequest = { email, password }
 
-        // Faz a requisição POST para a API de login e armazena o usuário logado no localStorage
-        return this.http.post<User>(`${this.apiUrl}/login`, request).pipe(
-            tap((user: User) => {
+        // observe: 'response' faz o Angular devolver a resposta completa (com headers), não só o body
+        return this.http.post<User>(`${this.apiUrl}/login`, request, { observe: 'response' }).pipe(
+            tap((response: HttpResponse<User>) => {
+                const user = response.body
+                const token = response.headers.get('Authorization')
+
                 localStorage.setItem(this.userKey, JSON.stringify(user))
-            })
+
+                if (token) {
+                    localStorage.setItem(this.tokenKey, token)
+                }
+            }),
+            map(response => response.body as User)
         )
     }
 

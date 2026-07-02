@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, signal } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router'
 import { UserService } from '../../services/user.services'
@@ -12,9 +12,9 @@ import { User } from '../../models/user.model'
 })
 
 export class UserList implements OnInit {
-  users: User[] = []
-  isLoading: boolean = true
-  errorMessage: string = ''
+  users = signal<User[]>([])
+  isLoading= signal(true)
+  errorMessage= signal('')
 
   constructor(
     private userService: UserService,
@@ -26,17 +26,17 @@ export class UserList implements OnInit {
   }
 
   loadUsers() {
-    this.isLoading = true
+    this.isLoading.set(true)
 
     this.userService.getAllUsers().subscribe({
       next: (users) => {
-        this.users = users
-        this.isLoading = false
+        this.users.set(users)
+        this.isLoading.set(false)
       },
       error: (error) => {
-        this.errorMessage = 'Erro ao carregar usuários'
+        this.errorMessage.set('Erro ao carregar usuários')
         console.error(error)
-        this.isLoading = false
+        this.isLoading.set(false)
       }
     })
   }
