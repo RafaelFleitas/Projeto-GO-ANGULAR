@@ -1,0 +1,47 @@
+# ==================
+# Segredos e variáveis de ambiente
+# ==================
+.env
+.env.local
+!.env.example
+
+# ==================
+# Go (API-Golang)
+# ==================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+go.work
+go.work.sum
+
+# ==================
+# Node / Angular (frontend-api-golang)
+# ==================
+node_modules/
+dist/
+out-tsc/
+.angular/
+npm-debug.log*
+yarn-error.log*
+
+# ==================
+# IDEs e editores
+# ==================
+.idea/
+*.sublime-workspace
+.history/
+.vscode/
+.claude/
+
+# ==================
+# Sistema operacional
+# ==================
+.DS_Store
+Thumbs.db
