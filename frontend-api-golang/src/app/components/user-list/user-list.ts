@@ -41,6 +41,18 @@ export class UserList implements OnInit {
     })
   }
 
+  deleteUser(id: number) {
+    this.userService.deleteUser(id).subscribe({
+      next: () => {
+        this.atualizarPagina()
+      },
+      error: (error) => {
+        this.errorMessage.set('Erro ao deletar usuário')
+        console.error(error)
+      }
+    })
+  }
+
   goToDashboard() {
     this.router.navigate(['/dashboard'])
   }

@@ -35,6 +35,7 @@
             <th class="px-6 py-3 text-sm font-semibold text-gray-700">Nome</th>
             <th class="px-6 py-3 text-sm font-semibold text-gray-700">Email</th>
             <th class="px-6 py-3 text-sm font-semibold text-gray-700">Idade</th>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700"></th>
           </tr>
         </thead>
         <tbody>
@@ -46,6 +47,14 @@
             <td class="px-6 py-4 text-gray-800 font-medium">{{ user.name }}</td>
             <td class="px-6 py-4 text-gray-600">{{ user.email }}</td>
             <td class="px-6 py-4 text-gray-600">{{ user.age }}</td>
+            <td>
+              <button 
+              type="button"
+              (click)="deleteUser(user.id)" 
+              class="bg-red-500 hover:bg-red-600 cursor-pointer text-white rounded-lg px-4 py-2">
+              Deletar
+            </button>
+            </td>
           </tr>
         }
         </tbody>
