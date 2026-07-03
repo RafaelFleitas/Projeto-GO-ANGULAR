@@ -1,0 +1,85 @@
+<div class="min-h-screen bg-gray-100">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-600 cursor-pointer">Editar Usuário</h1>
+      <button (click)="goToDashboard()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+        Voltar
+      </button>
+    </div>
+  </nav>
+
+  <!-- Excessões -->
+  <div class="max-w-2xl mx-auto px-4 py-12">
+    <!-- Loading -->
+    @if(isLoading()){
+      <div class="text-center text-gray-600">
+        Carregando usuário...
+      </div>
+    }
+
+    <!-- Erro -->
+    @if(errorMessage()){
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <!-- Formulário -->
+    @if(!isLoading() && user()){
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <form (ngSubmit)="updateUser()" class="space-y-6">
+          <!-- Campo Nome -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Nome
+                </label>
+                <input
+                    type="text"
+                    [value]="userName()"
+                    (input)="userName.set($event.target.value)"
+                    name="name"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Digite o nome"
+                    required
+                />
+            </div>
+
+            <!-- Campo Idade -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Idade
+                </label>
+                <input
+                    type="number"
+                    [value]="userAge()"
+                    (input)="userAge.set($event.target.value)"
+                    name="age"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Digite a idade"
+                    required
+                />
+            </div>
+
+
+          <!-- Botões -->
+          <div class="flex gap-4">
+            <button
+              type="submit"
+              class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
+            >
+              Salvar
+            </button>
+            <button
+              type="button"
+              (click)="goToDashboard()"
+              class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition cursor-pointer"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+  </div>
+</div>

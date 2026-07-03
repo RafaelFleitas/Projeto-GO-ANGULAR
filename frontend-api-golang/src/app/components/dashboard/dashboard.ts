@@ -41,9 +41,12 @@ export class Dashboard implements OnInit {
   }
 
   goToCreateUser() {
-    this.router.navigate(['/users/new'])
+    this.router.navigate(['/users/create'])
   }
   goToUpdateUser() {
-    this.router.navigate(['/users/update'])
+    const id = prompt('Digite o ID do usuário que deseja atualizar:')
+    if (id){
+      this.router.navigate(['/users/update', id])
+    }
   }
 }

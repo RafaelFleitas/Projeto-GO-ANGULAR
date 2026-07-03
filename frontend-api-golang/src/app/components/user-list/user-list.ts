@@ -44,4 +44,8 @@ export class UserList implements OnInit {
   goToDashboard() {
     this.router.navigate(['/dashboard'])
   }
+
+  atualizarPagina(){
+    window.location.reload();
+  }
 }
