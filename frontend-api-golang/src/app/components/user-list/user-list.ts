@@ -26,8 +26,7 @@ export class UserList implements OnInit {
     }
 
     return this.users().filter(user =>
-      user.name.toLowerCase().includes(term) ||
-      user.email.toLowerCase().includes(term)
+      user.name.toLowerCase().includes(term) || user.email.toLowerCase().includes(term)
     )
   })
 

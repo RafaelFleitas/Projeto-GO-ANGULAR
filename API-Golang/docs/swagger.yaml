@@ -1,0 +1,298 @@
+basePath: /
+definitions:
+  request.UserLogin:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  request.UserRequest:
+    properties:
+      age:
+        maximum: 140
+        minimum: 1
+        type: integer
+      email:
+        type: string
+      name:
+        maxLength: 50
+        minLength: 4
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - age
+    - email
+    - name
+    - password
+    type: object
+  request.UserUpdateRequest:
+    properties:
+      age:
+        maximum: 140
+        minimum: 1
+        type: integer
+      name:
+        maxLength: 50
+        minLength: 4
+        type: string
+    type: object
+  response.UserResponse:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  rest_err.Causes:
+    properties:
+      field:
+        description: Campo que originou o erro.
+        type: string
+      message:
+        description: Mensagem específica para o campo.
+        type: string
+    type: object
+  rest_err.RestErr:
+    properties:
+      causes:
+        description: Lista de causas detalhadas do erro
+        items:
+          $ref: '#/definitions/rest_err.Causes'
+        type: array
+      code:
+        description: Código de status HTTP.
+        type: integer
+      error:
+        description: 'Tipo do erro (ex: "bad_request", "internal_server_error").'
+        type: string
+      message:
+        description: Mensagem principal do erro.
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: API de gerenciamento de usuários com autenticação JWT.
+  title: API CRUD Golang
+  version: "1.0"
+paths:
+  /createUser:
+    post:
+      consumes:
+      - application/json
+      description: Cadastra um novo usuário no sistema
+      parameters:
+      - description: Dados do usuário
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+      summary: Cria um novo usuário
+      tags:
+      - users
+  /deleteUser/{userId}:
+    delete:
+      description: Exclui um usuário existente pelo ID
+      parameters:
+      - description: ID do usuário
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+      security:
+      - BearerAuth: []
+      summary: Remove um usuário
+      tags:
+      - users
+  /getAllUsers:
+    get:
+      description: Retorna a lista completa de usuários cadastrados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.UserResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+      security:
+      - BearerAuth: []
+      summary: Lista todos os usuários
+      tags:
+      - users
+  /getUserByEmail/{userEmail}:
+    get:
+      description: Retorna os dados de um usuário específico a partir do email
+      parameters:
+      - description: Email do usuário
+        in: path
+        name: userEmail
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+      security:
+      - BearerAuth: []
+      summary: Busca um usuário pelo email
+      tags:
+      - users
+  /getUserById/{userId}:
+    get:
+      description: Retorna os dados de um usuário específico
+      parameters:
+      - description: ID do usuário
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+      security:
+      - BearerAuth: []
+      summary: Busca um usuário pelo ID
+      tags:
+      - users
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Valida email e senha e retorna um token JWT no header Authorization
+      parameters:
+      - description: Credenciais de login
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Authorization:
+              description: Bearer token JWT
+              type: string
+          schema:
+            $ref: '#/definitions/response.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+      summary: Autentica um usuário
+      tags:
+      - auth
+  /updateUser/{userId}:
+    put:
+      consumes:
+      - application/json
+      description: Atualiza nome e/ou idade de um usuário existente
+      parameters:
+      - description: ID do usuário
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: Dados a atualizar
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest_err.RestErr'
+      security:
+      - BearerAuth: []
+      summary: Atualiza um usuário
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

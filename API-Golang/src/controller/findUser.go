@@ -12,8 +12,17 @@ import (
 	"go.uber.org/zap"
 )
 
-// O gin.Context tem todas as informações da request
-// Controller dos Find
+// FindUserByID godoc
+// @Summary Busca um usuário pelo ID
+// @Description Retorna os dados de um usuário específico
+// @Tags users
+// @Produce json
+// @Param userId path int true "ID do usuário"
+// @Security BearerAuth
+// @Success 200 {object} response.UserResponse
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 404 {object} rest_err.RestErr
+// @Router /getUserById/{userId} [get]
 func (uc *userControllerInterface) FindUserByID(c *gin.Context) {
 	logger.Info("Init FindUserByIdController",
 		zap.String("journey", "FindUserById"),
@@ -46,6 +55,17 @@ func (uc *userControllerInterface) FindUserByID(c *gin.Context) {
 
 }
 
+// FindUserByEmail godoc
+// @Summary Busca um usuário pelo email
+// @Description Retorna os dados de um usuário específico a partir do email
+// @Tags users
+// @Produce json
+// @Param userEmail path string true "Email do usuário"
+// @Security BearerAuth
+// @Success 200 {object} response.UserResponse
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 404 {object} rest_err.RestErr
+// @Router /getUserByEmail/{userEmail} [get]
 func (uc *userControllerInterface) FindUserByEmail(c *gin.Context) {
 
 	logger.Info("Init FindUserByEmailController",
@@ -78,6 +98,15 @@ func (uc *userControllerInterface) FindUserByEmail(c *gin.Context) {
 
 }
 
+// FindAllUsers godoc
+// @Summary Lista todos os usuários
+// @Description Retorna a lista completa de usuários cadastrados
+// @Tags users
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} response.UserResponse
+// @Failure 401 {object} rest_err.RestErr
+// @Router /getAllUsers [get]
 func (uc *userControllerInterface) FindAllUsers(c *gin.Context) {
 	logger.Info("Init FindAllUsersController",
 		zap.String("journey", "FindAllUsers"),

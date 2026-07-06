@@ -6,11 +6,14 @@ import (
 	"os"
 	"strings"
 
+	_ "github.com/RafaelFleitas/API-Golang/docs"
 	oraclesql "github.com/RafaelFleitas/API-Golang/src/configuration/database/oracleSQL"
 	"github.com/RafaelFleitas/API-Golang/src/configuration/logger"
 	"github.com/RafaelFleitas/API-Golang/src/controller/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func corsMiddleware() gin.HandlerFunc {
@@ -47,6 +50,15 @@ func corsMiddleware() gin.HandlerFunc {
 	}
 }
 
+// @title API CRUD Golang
+// @version 1.0
+// @description API de gerenciamento de usuários com autenticação JWT.
+// @host localhost:8000
+// @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+
 func main() {
 
 	logger.Info("About to start the application")
@@ -63,6 +75,7 @@ func main() {
 
 	router := gin.Default()
 	router.Use(corsMiddleware())
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	routes.InitRoutes(&router.RouterGroup, userController)
 	if err := router.Run(":8000"); err != nil {
 		log.Fatal(err)

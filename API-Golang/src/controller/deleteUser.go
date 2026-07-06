@@ -10,7 +10,17 @@ import (
 	"go.uber.org/zap"
 )
 
-// Controller do Delete
+// DeleteUser godoc
+// @Summary Remove um usuário
+// @Description Exclui um usuário existente pelo ID
+// @Tags users
+// @Produce json
+// @Param userId path int true "ID do usuário"
+// @Security BearerAuth
+// @Success 200
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 404 {object} rest_err.RestErr
+// @Router /deleteUser/{userId} [delete]
 func (uc *userControllerInterface) DeleteUser(c *gin.Context) {
 
 	logger.Info("Init deleteUser controller",

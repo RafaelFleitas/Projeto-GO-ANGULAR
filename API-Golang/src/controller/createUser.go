@@ -12,7 +12,16 @@ import (
 	"go.uber.org/zap"
 )
 
-// Controller do Create
+// CreateUser godoc
+// @Summary Cria um novo usuário
+// @Description Cadastra um novo usuário no sistema
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param user body request.UserRequest true "Dados do usuário"
+// @Success 200 {object} response.UserResponse
+// @Failure 400 {object} rest_err.RestErr
+// @Router /createUser [post]
 func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 
 	logger.Info("Init CreateUser controller",

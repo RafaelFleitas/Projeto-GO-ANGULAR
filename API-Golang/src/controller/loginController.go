@@ -12,6 +12,18 @@ import (
 	"go.uber.org/zap"
 )
 
+// LoginUser godoc
+// @Summary Autentica um usuário
+// @Description Valida email e senha e retorna um token JWT no header Authorization
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param credentials body request.UserLogin true "Credenciais de login"
+// @Success 200 {object} response.UserResponse
+// @Header 200 {string} Authorization "Bearer token JWT"
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 401 {object} rest_err.RestErr
+// @Router /login [post]
 func (uc *userControllerInterface) LoginUser(c *gin.Context) {
 
 	logger.Info("Init loginUser controller",

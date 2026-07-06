@@ -14,6 +14,19 @@ import (
 	"go.uber.org/zap"
 )
 
+// UpdateUser godoc
+// @Summary Atualiza um usuário
+// @Description Atualiza nome e/ou idade de um usuário existente
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param userId path int true "ID do usuário"
+// @Param user body request.UserUpdateRequest true "Dados a atualizar"
+// @Security BearerAuth
+// @Success 200 {object} response.UserResponse
+// @Failure 400 {object} rest_err.RestErr
+// @Failure 404 {object} rest_err.RestErr
+// @Router /updateUser/{userId} [put]
 func (uc *userControllerInterface) UpdateUser(c *gin.Context) {
 
 	logger.Info("Init UpdateUser controller",
