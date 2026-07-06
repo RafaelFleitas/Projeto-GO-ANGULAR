@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	oraclesql "github.com/RafaelFleitas/API-Golang/src/configuration/database/oracleSQL"
 	"github.com/RafaelFleitas/API-Golang/src/configuration/logger"
@@ -12,9 +14,25 @@ import (
 )
 
 func corsMiddleware() gin.HandlerFunc {
+	allowedOrigins := map[string]bool{}
+	rawOrigins := os.Getenv("ALLOWED_ORIGINS")
+
+	if rawOrigins == "" {
+		rawOrigins = "http://localhost:4200"
+	}
+
+	for _, origin := range strings.Split(rawOrigins, ",") {
+		allowedOrigins[strings.TrimSpace(origin)] = true
+	}
+
 	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		origin := c.Request.Header.Get("Origin")
+		c.Writer.Header().Set("Vary", "Origin")
+		if allowedOrigins[origin] {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+			c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		}
+
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
 		c.Writer.Header().Set("Access-Control-Max-Age", "86400")
