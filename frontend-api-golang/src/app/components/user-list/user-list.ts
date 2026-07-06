@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core'
+import { Component, OnInit, signal, computed } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router'
 import { UserService } from '../../services/user.services'
@@ -15,6 +15,21 @@ export class UserList implements OnInit {
   users = signal<User[]>([])
   isLoading= signal(true)
   errorMessage= signal('')
+  searchTerm= signal('')
+
+  filteredUsers = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase()
+  
+
+    if (!term) {
+      return this.users()
+    }
+
+    return this.users().filter(user =>
+      user.name.toLowerCase().includes(term) ||
+      user.email.toLowerCase().includes(term)
+    )
+  })
 
   constructor(
     private userService: UserService,
@@ -53,11 +68,17 @@ export class UserList implements OnInit {
     })
   }
 
+  
+  onSearchChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value
+    this.searchTerm.set(value)
+  }
+
   goToDashboard() {
     this.router.navigate(['/dashboard'])
   }
 
   atualizarPagina(){
-    window.location.reload();
+    this.loadUsers();
   }
 }

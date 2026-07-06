@@ -25,6 +25,17 @@
     </div>
     }
 
+    <!-- Busca -->
+    <div class="mb-4">
+      <input
+        type="text"
+        placeholder="Buscar por nome ou email..."
+        (input)="onSearchChange($event)"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+      />
+    </div>
+
+
     <!-- Tabela -->
      @if (!isLoading() && !errorMessage()){
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -39,7 +50,7 @@
           </tr>
         </thead>
         <tbody>
-            @for (user of users(); track user.id){
+            @for (user of filteredUsers(); track user.id){
           <tr
             class="border-b border-gray-100 hover:bg-gray-50 transition"
           >
@@ -61,7 +72,7 @@
       </table>
 
       <!-- Empty state -->
-       @if(users().length === 0){
+       @if(filteredUsers().length === 0){
       <div class="text-center text-gray-500 py-12">
         Nenhum usuário cadastrado.
       </div>
