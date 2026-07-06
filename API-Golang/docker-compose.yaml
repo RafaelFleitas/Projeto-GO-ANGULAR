@@ -4,13 +4,16 @@ services:
   meuprimeirocrudgo:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     environment:
       ORACLE_URL: ${ORACLE_URL}
       ORACLE_PASSWORD: ${ORACLE_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app
+    restart: always
     depends_on:
       oracle:
         condition: service_healthy
