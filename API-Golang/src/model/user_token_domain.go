@@ -18,6 +18,10 @@ func (ud *userDomain) GenerateToken() (string, *rest_err.RestErr) {
 
 	secret := os.Getenv(JWT_SECRET_KEY)
 
+	if secret == "" {
+		return "", rest_err.NewInternalServerError("JWT secret key not configured")
+	}
+
 	//Informações que serão exibidas
 	claims := jwt.MapClaims{
 		"id":    ud.id,
