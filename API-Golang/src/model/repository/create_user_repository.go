@@ -31,7 +31,8 @@ func (ur *userRepository) CreateUserRepository(
 	)
 
 	if err != nil {
-		return nil, rest_err.NewInternalServerError(err.Error())
+		logger.Error("Error trying to create user", err)
+		return nil, rest_err.NewInternalServerError("Erro interno, tente novmaente")
 	}
 
 	userDomain.SetID(generatedID)

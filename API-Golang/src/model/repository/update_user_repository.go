@@ -23,7 +23,8 @@ func (ur *userRepository) UpdateUserRepository(
 	)
 
 	if err != nil {
-		return rest_err.NewInternalServerError(err.Error())
+		logger.Error("Error trying to update user", err)
+		return rest_err.NewInternalServerError("Erro interno, tente novmaente")
 	}
 
 	return nil

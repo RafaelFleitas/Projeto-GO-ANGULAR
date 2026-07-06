@@ -18,7 +18,8 @@ func (ur *userRepository) DeleteUserRepository(userId int64) *rest_err.RestErr {
 	)
 
 	if err != nil {
-		return rest_err.NewInternalServerError(err.Error())
+		logger.Error("Error trying to delete user", err)
+		return rest_err.NewInternalServerError("Erro interno, tente novmaente")
 	}
 
 	return nil
