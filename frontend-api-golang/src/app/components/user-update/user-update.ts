@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { FormsModule } from '@angular/forms'
 import { UserService } from '../../services/user.services'
 import { User } from '../../models/user.model'
+import { NotificationService } from '../../services/notification.service'
+
 
 @Component({
   selector: 'app-user-update',
@@ -22,7 +24,8 @@ export class UserUpdate implements OnInit {
   constructor(
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -62,6 +65,7 @@ export class UserUpdate implements OnInit {
   }).subscribe({
     next: () => {
       this.isLoading.set(false)
+      this.notificationService.success('Usuário atualizado com sucesso')
       this.router.navigate(['/users'])
     },
     error: (error) => {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { signal } from '@angular/core';
 import { UserService } from '../../services/user.services';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../services/notification.service';
 
 
 
@@ -23,7 +24,8 @@ export class UserCreate {
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService
   ) { }
 
   createUser(){
@@ -41,6 +43,7 @@ export class UserCreate {
       }).subscribe({
           next: () =>  {
             this.isLoading.set(false)
+            this.notificationService.success('Usuário criado com sucesso')
             this.router.navigate(['/users'])
           },
           error: (error) => {

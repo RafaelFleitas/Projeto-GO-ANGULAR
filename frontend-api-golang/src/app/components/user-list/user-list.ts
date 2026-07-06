@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router'
 import { UserService } from '../../services/user.services'
 import { User } from '../../models/user.model'
+import { NotificationService } from '../../services/notification.service'
+
 
 @Component({
   selector: 'app-user-list',
@@ -32,7 +34,8 @@ export class UserList implements OnInit {
 
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -48,7 +51,7 @@ export class UserList implements OnInit {
         this.isLoading.set(false)
       },
       error: (error) => {
-        this.errorMessage.set('Erro ao carregar usuários')
+        this.notificationService.error('Erro ao carregar usuários')
         console.error(error)
         this.isLoading.set(false)
       }
@@ -58,10 +61,11 @@ export class UserList implements OnInit {
   deleteUser(id: number) {
     this.userService.deleteUser(id).subscribe({
       next: () => {
+        this.notificationService.success('Usuário deletado com sucesso')
         this.atualizarPagina()
       },
       error: (error) => {
-        this.errorMessage.set('Erro ao deletar usuário')
+        this.notificationService.error('Erro ao deletar usuários')
         console.error(error)
       }
     })
