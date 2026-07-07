@@ -30,3 +30,22 @@ func (ur *userRepository) UpdateUserRepository(
 	return nil
 
 }
+
+func (ur *userRepository) UpdateAvatarRepository(userId int64, avatarURL string) *rest_err.RestErr {
+
+	logger.Info("Init updateAvatar repository")
+
+	_, err := ur.databaseConnection.ExecContext(
+		context.Background(),
+		"UPDATE users SET avatar_url = :1 WHERE id = :2",
+		avatarURL,
+		userId,
+	)
+
+	if err != nil {
+		logger.Error("Error trying to update avatar", err)
+		return rest_err.NewInternalServerError("Erro interno, tente novamente")
+	}
+
+	return nil
+}

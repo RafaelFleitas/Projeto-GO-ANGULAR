@@ -15,6 +15,9 @@ type UserDomainInterface interface {
 
 	EncryptPassword()
 	GenerateToken() (string, *rest_err.RestErr)
+
+	GetAvatarURL() string
+	SetAvatarURL(url string)
 }
 
 // NewUserDomain é o construtor do usuário. Recebe os dados da requisição e devolve a interface.

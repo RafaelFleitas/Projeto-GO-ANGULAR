@@ -22,6 +22,7 @@ func NewUserDomainService(repository repository.UserRepository) UserDomainServic
 type UserDomainService interface {
 	CreateUserService(model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr)
 	UpdateUserService(userId int64, userDomain model.UserDomainInterface) (model.UserDomainInterface, *rest_err.RestErr)
+	UpdateAvatarService(userId int64, avatarURL string) (model.UserDomainInterface, *rest_err.RestErr)
 	FindUserByIdService(id int64) (model.UserDomainInterface, *rest_err.RestErr)
 	FindUserByEmailService(email string) (model.UserDomainInterface, *rest_err.RestErr)
 	FindAllUsersService() ([]model.UserDomainInterface, *rest_err.RestErr)

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService } from '../../services/auth'
@@ -13,7 +13,7 @@ export class Login {
   email: string = ''
   password: string = ''
   errorMessage: string = ''
-  isLoading: boolean = false
+  isLoading = signal(false)
 
   constructor(
     private authService: AuthService,
@@ -27,7 +27,7 @@ export class Login {
     }
   
 
-  this.isLoading = true
+  this.isLoading.set(true)
   this.authService.login(this.email, this.password).subscribe({
     next: (response) => {
       this.router.navigate(['/dashboard'])
@@ -35,7 +35,7 @@ export class Login {
     error: (error) => {
       this.errorMessage = 'Email ou senha inválidos. Por favor, tente novamente.'
       console.error('Erro no login:', error)
-      this.isLoading = false
+      this.isLoading.set(false)
     }
   })
 

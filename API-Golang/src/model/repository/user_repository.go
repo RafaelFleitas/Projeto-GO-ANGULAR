@@ -21,6 +21,7 @@ type UserRepository interface {
 	FindAllUsersRepository() ([]model.UserDomainInterface, *rest_err.RestErr)
 	FindUserByEmailAndPasswordRepository(email, password string) (model.UserDomainInterface, *rest_err.RestErr)
 	UpdateUserRepository(int64, model.UserDomainInterface) *rest_err.RestErr
+	UpdateAvatarRepository(int64, string) *rest_err.RestErr
 	DeleteUserRepository(int64) *rest_err.RestErr
 }
 

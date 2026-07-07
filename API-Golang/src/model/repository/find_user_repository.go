@@ -18,13 +18,13 @@ func (ur *userRepository) FindUserByEmailRepository(email string) (model.UserDom
 
 	row := ur.databaseConnection.QueryRowContext(
 		context.Background(),
-		"SELECT id, name, email, password, age FROM users WHERE email = :1",
+		"SELECT id, name, email, password, age, avatar_url FROM users WHERE email = :1",
 		email,
 	)
 
 	userEntity := &entity.UserEntity{}
 
-	err := row.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age)
+	err := row.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age, &userEntity.AvatarURL)
 
 	if err != nil {
 		logger.Error("Error trying to find user by email", err)
@@ -47,13 +47,13 @@ func (ur *userRepository) FindUserByIdRepository(id int64) (model.UserDomainInte
 
 	row := ur.databaseConnection.QueryRowContext(
 		context.Background(),
-		"SELECT id, name, email, password, age FROM users WHERE ID = :1",
+		"SELECT id, name, email, password, age, avatar_url FROM users WHERE ID = :1",
 		id,
 	)
 
 	userEntity := &entity.UserEntity{}
 
-	err := row.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age)
+	err := row.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age, &userEntity.AvatarURL)
 
 	if err != nil {
 		logger.Error("Error trying to find user by ID", err)
@@ -76,13 +76,13 @@ func (ur *userRepository) FindUserByEmailAndPasswordRepository(email, password s
 
 	row := ur.databaseConnection.QueryRowContext(
 		context.Background(),
-		"SELECT id, name, email, password, age FROM users WHERE email = :1",
+		"SELECT id, name, email, password, age, avatar_url FROM users WHERE email = :1",
 		email,
 	)
 
 	userEntity := &entity.UserEntity{}
 
-	err := row.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age)
+	err := row.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age, &userEntity.AvatarURL)
 
 	if err != nil {
 		logger.Error("Error trying to find user by email and password", err)
@@ -109,7 +109,7 @@ func (ur *userRepository) FindAllUsersRepository() ([]model.UserDomainInterface,
 
 	rows, err := ur.databaseConnection.QueryContext(
 		context.Background(),
-		"SELECT id, name, email, password, age FROM users",
+		"SELECT id, name, email, password, age, avatar_url FROM users",
 	)
 
 	if err != nil {
@@ -123,7 +123,7 @@ func (ur *userRepository) FindAllUsersRepository() ([]model.UserDomainInterface,
 	for rows.Next() {
 		userEntity := &entity.UserEntity{}
 
-		if err := rows.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age); err != nil {
+		if err := rows.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age, &userEntity.AvatarURL); err != nil {
 			logger.Error("Error trying to scan user", err)
 			return nil, rest_err.NewInternalServerError("Error trying to scan user")
 		}

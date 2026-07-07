@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/RafaelFleitas/API-Golang/src/configuration/logger"
+	"github.com/RafaelFleitas/API-Golang/src/configuration/rest_err"
+	"github.com/RafaelFleitas/API-Golang/src/view"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -14,12 +16,22 @@ func (uc *userControllerInterface) UploadAvatar(c *gin.Context) {
 		zap.String("journey", "UploadAvatar"),
 	)
 
-	file, err := c.FormFile("avatar")
+	// Pega o ID do usuário logado, que o middleware colocou no contexto
+	userIdValue, exists := c.Get("userId")
+	if !exists {
+		errRest := rest_err.NewUnauthorizedRequestError("Usuário não autenticado")
+		c.JSON(errRest.Code, errRest)
+		return
+	}
+	userId := userIdValue.(int64)
 
+	file, err := c.FormFile("avatar")
 	if err != nil {
 		logger.Error("Error trying to upload avatar", err,
 			zap.String("journey", "UploadAvatar"),
 		)
+		errRest := rest_err.NewBadRequestError("Arquivo não encontrado")
+		c.JSON(errRest.Code, errRest)
 		return
 	}
 
@@ -29,13 +41,26 @@ func (uc *userControllerInterface) UploadAvatar(c *gin.Context) {
 		logger.Error("Error trying to save avatar", err,
 			zap.String("journey", "UploadAvatar"),
 		)
+		errRest := rest_err.NewInternalServerError("Erro ao salvar arquivo")
+		c.JSON(errRest.Code, errRest)
 		return
 	}
 
-	imageURL := fmt.Sprintf("http://localhost:8000/uploads/user-avatars/%s", file.Filename)
+	avatarPath := fmt.Sprintf("/uploads/user-avatars/%s", file.Filename)
 
-	c.JSON(200, gin.H{
-		"message": "Arquivo enviado com sucesso",
-		"url":     imageURL,
-	})
+	// Salva a URL no banco, associada ao usuário logado
+	updatedUser, restErr := uc.service.UpdateAvatarService(userId, avatarPath)
+	if restErr != nil {
+		logger.Error("Error trying to update avatar in database", restErr,
+			zap.String("journey", "UploadAvatar"),
+		)
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	logger.Info("Avatar updated successfully",
+		zap.String("journey", "UploadAvatar"),
+	)
+
+	c.JSON(200, view.ConvertDomainToResponse(updatedUser))
 }

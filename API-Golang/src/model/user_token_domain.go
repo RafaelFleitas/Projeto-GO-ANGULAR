@@ -107,6 +107,8 @@ func MiddlewareVerifyToken(c *gin.Context) {
 		age:   int8(claims["age"].(float64)),
 	}
 
+	c.Set("userId", userDomain.GetID())
+
 	logger.Info(fmt.Sprintf("User authenticated: %#v ", userDomain))
 
 }

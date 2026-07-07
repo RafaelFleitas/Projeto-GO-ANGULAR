@@ -9,6 +9,7 @@ services:
       ORACLE_URL: ${ORACLE_URL}
       ORACLE_PASSWORD: ${ORACLE_PASSWORD}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      API_BASE_URL: ${API_BASE_URL}
     ports:
       - "8000:8000"
     volumes:

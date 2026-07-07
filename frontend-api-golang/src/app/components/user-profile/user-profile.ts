@@ -71,10 +71,10 @@ export class UserProfile implements OnInit {
     const formData = new FormData()
     formData.append('avatar', this.selectedFile)
 
-    this.http.post('http://localhost:8000/upload/avatar', formData).subscribe({
-      next: (response: any) => {
-        this.currentUser!.profileImage = response.url
-        localStorage.setItem('current_user', JSON.stringify(this.currentUser))
+    this.http.post<User>('http://localhost:8000/upload/avatar', formData).subscribe({
+      next: (updatedUser) => {
+        this.currentUser = updatedUser
+        localStorage.setItem('current_user', JSON.stringify(updatedUser))
         this.notificationService.success('Foto atualizada com sucesso!')
         this.isLoading.set(false)
         this.resetForm()

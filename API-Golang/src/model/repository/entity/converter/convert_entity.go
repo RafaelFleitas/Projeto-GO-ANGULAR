@@ -24,6 +24,10 @@ func ConvertEntityToDomain(userEntity *entity.UserEntity) model.UserDomainInterf
 
 	domain.SetID(userEntity.ID)
 
+	if userEntity.AvatarURL.Valid {
+		domain.SetAvatarURL(userEntity.AvatarURL.String)
+	}
+
 	return domain
 
 }
