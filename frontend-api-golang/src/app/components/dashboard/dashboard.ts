@@ -52,7 +52,7 @@ export class Dashboard implements OnInit {
   }
 
   getProfileImage(): string {
-    return this.currentUser?.profileImage || 'assets/default-avatar.png'
+    return this.currentUser?.profileImage || '/default-avatar.png'
   }
 
   //Funções da grid

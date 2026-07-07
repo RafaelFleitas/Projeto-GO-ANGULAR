@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, signal } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router'
 import { AuthService } from '../../services/auth'
 import { User } from '../../models/user.model'
 import { NotificationService } from '../../services/notification.service'
+import { HttpClient } from '@angular/common/http'
 
 
 @Component({
@@ -15,13 +16,15 @@ import { NotificationService } from '../../services/notification.service'
 export class UserProfile implements OnInit {
   currentUser: User | null = null
   selectedFile: File | null = null
-  previewUrl: string | null = null
-  isLoading = false
+  previewUrl= signal<string | null>(null)
+  isLoading = signal(false)
+
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private http: HttpClient
   ){}
 
   ngOnInit(){
@@ -54,7 +57,7 @@ export class UserProfile implements OnInit {
 
     const reader = new FileReader()
     reader.onload = (e: any) => {
-      this.previewUrl = e.target.result
+      this.previewUrl.set(e.target.result)
     }
     reader.readAsDataURL(file)
   }
@@ -64,26 +67,30 @@ export class UserProfile implements OnInit {
       this.notificationService.warning('Selecione uma imagem antes de salvar')
       return
     }
-    this.isLoading = true
+    this.isLoading.set(true)   // 👈 antes era: this.isLoading = true
 
+    const formData = new FormData()
+    formData.append('avatar', this.selectedFile)
 
-    const reader = new FileReader()
-    
-    reader.onload = () => {
-      const base64String = reader.result as string
-      this.currentUser!.profileImage = base64String
-      localStorage.setItem('current_user', JSON.stringify(this.currentUser))
-      this.notificationService.success('Foto atualizada com sucesso!')
-      this.isLoading = false
-      this.resetForm()
-    }
-
-    reader.readAsDataURL(this.selectedFile)
+    this.http.post('http://localhost:8000/upload/avatar', formData).subscribe({
+      next: (response: any) => {
+        this.currentUser!.profileImage = response.url
+        localStorage.setItem('current_user', JSON.stringify(this.currentUser))
+        this.notificationService.success('Foto atualizada com sucesso!')
+        this.isLoading.set(false)   // 👈 antes era: this.isLoading = false
+        this.resetForm()
+      },
+      error: (err) => {
+        console.error('Error ao salvar: ', err)
+        this.notificationService.error('Erro ao salvar imagem')
+        this.isLoading.set(false)   // 👈 antes era: this.isLoading = false
+      }
+    })
   }
 
   resetForm() {
     this.selectedFile = null
-    this.previewUrl = null
+    this.previewUrl.set(null)
   }
 
   goBack() {

@@ -18,4 +18,7 @@ func InitRoutes(r *gin.RouterGroup, userController controller.UserControllerInte
 
 	r.POST("/login", userController.LoginUser)
 
+	r.POST("/upload/avatar", model.MiddlewareVerifyToken, userController.UploadAvatar)
+	r.Static("/uploads", "./uploads")
+
 }

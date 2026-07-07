@@ -19,6 +19,7 @@ type UserControllerInterface interface {
 	UpdateUser(c *gin.Context)
 	DeleteUser(c *gin.Context)
 	LoginUser(c *gin.Context)
+	UploadAvatar(c *gin.Context)
 }
 
 type userControllerInterface struct {

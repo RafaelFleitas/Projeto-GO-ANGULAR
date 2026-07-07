@@ -31,7 +31,6 @@ export class Login {
   this.isLoading = true
   this.authService.login(this.email, this.password).subscribe({
     next: (response) => {
-      console.log('Login bem-sucedido:', response)
       this.router.navigate(['/dashboard'])
     },
     error: (error) => {
