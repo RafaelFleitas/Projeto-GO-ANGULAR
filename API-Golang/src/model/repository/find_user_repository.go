@@ -104,17 +104,21 @@ func (ur *userRepository) FindUserByEmailAndPasswordRepository(email, password s
 
 }
 
-func (ur *userRepository) FindAllUsersRepository() ([]model.UserDomainInterface, *rest_err.RestErr) {
+func (ur *userRepository) FindAllUsersRepository(page, pageSize int64) ([]model.UserDomainInterface, int64, *rest_err.RestErr) {
 	logger.Info("Init FindAllUsers user repository")
+
+	offset := (page - 1) * pageSize
 
 	rows, err := ur.databaseConnection.QueryContext(
 		context.Background(),
-		"SELECT id, name, email, password, age, avatar_url FROM users",
+		"SELECT id, name, email, password, age, avatar_url FROM users ORDER BY id OFFSET :1 ROWS FETCH NEXT :2 ROWS ONLY",
+		offset,
+		pageSize,
 	)
 
 	if err != nil {
 		logger.Error("Error trying to find all users", err)
-		return nil, rest_err.NewInternalServerError("Error trying to find all users")
+		return nil, 0, rest_err.NewInternalServerError("Error trying to find all users")
 	}
 	defer rows.Close()
 
@@ -125,14 +129,25 @@ func (ur *userRepository) FindAllUsersRepository() ([]model.UserDomainInterface,
 
 		if err := rows.Scan(&userEntity.ID, &userEntity.Name, &userEntity.Email, &userEntity.Password, &userEntity.Age, &userEntity.AvatarURL); err != nil {
 			logger.Error("Error trying to scan user", err)
-			return nil, rest_err.NewInternalServerError("Error trying to scan user")
+			return nil, 0, rest_err.NewInternalServerError("Error trying to scan user")
 		}
 
 		users = append(users, converter.ConvertEntityToDomain(userEntity))
 	}
 
+	var total int64
+	countRow := ur.databaseConnection.QueryRowContext(
+		context.Background(),
+		"SELECT COUNT(*) FROM users",
+	)
+
+	if err := countRow.Scan(&total); err != nil {
+		logger.Error("Error trying to count users", err)
+		return nil, 0, rest_err.NewInternalServerError("Error trying to count users")
+	}
+
 	logger.Info("FindAllUsers repository executed successfully",
 		zap.String("journey", "FindAllUsers"))
 
-	return users, nil
+	return users, total, nil
 }

@@ -25,7 +25,7 @@ type UserDomainService interface {
 	UpdateAvatarService(userId int64, avatarURL string) (model.UserDomainInterface, *rest_err.RestErr)
 	FindUserByIdService(id int64) (model.UserDomainInterface, *rest_err.RestErr)
 	FindUserByEmailService(email string) (model.UserDomainInterface, *rest_err.RestErr)
-	FindAllUsersService() ([]model.UserDomainInterface, *rest_err.RestErr)
+	FindAllUsersService(page, pageSize int64) ([]model.UserDomainInterface, int64, *rest_err.RestErr)
 	LoginUserService(userDomain model.UserDomainInterface) (model.UserDomainInterface, string, *rest_err.RestErr)
 	DeleteUserService(int64) *rest_err.RestErr
 }

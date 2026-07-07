@@ -23,3 +23,11 @@ export interface CreateRequest{
   password: string
   age: number
 }
+
+export interface PaginatedUsersResponse {
+  users: User[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
+}

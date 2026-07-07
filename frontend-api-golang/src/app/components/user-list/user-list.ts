@@ -14,13 +14,17 @@ import { NotificationService } from '../../services/notification.service'
 
 export class UserList implements OnInit {
   users = signal<User[]>([])
-  isLoading= signal(true)
-  errorMessage= signal('')
-  searchTerm= signal('')
+  isLoading = signal(true)
+  errorMessage = signal('')
+  searchTerm = signal('')
+
+  currentPage = signal(1)
+  pageSize = signal(10)
+  total = signal(0)
+  totalPages = signal(0)
 
   filteredUsers = computed(() => {
     const term = this.searchTerm().trim().toLowerCase()
-  
 
     if (!term) {
       return this.users()
@@ -44,9 +48,11 @@ export class UserList implements OnInit {
   loadUsers() {
     this.isLoading.set(true)
 
-    this.userService.getAllUsers().subscribe({
-      next: (users) => {
-        this.users.set(users)
+    this.userService.getAllUsers(this.currentPage(), this.pageSize()).subscribe({
+      next: (response) => {
+        this.users.set(response.users)
+        this.total.set(response.total)
+        this.totalPages.set(response.totalPages)
         this.isLoading.set(false)
       },
       error: (error) => {
@@ -70,7 +76,6 @@ export class UserList implements OnInit {
     })
   }
 
-  
   onSearchChange(event: Event) {
     const value = (event.target as HTMLInputElement).value
     this.searchTerm.set(value)
@@ -82,5 +87,19 @@ export class UserList implements OnInit {
 
   atualizarPagina(){
     this.loadUsers();
+  }
+
+  nextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.set(this.currentPage() + 1)
+      this.loadUsers()
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage() > 1) {
+      this.currentPage.set(this.currentPage() - 1)
+      this.loadUsers()
+    }
   }
 }

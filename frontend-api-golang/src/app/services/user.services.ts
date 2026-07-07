@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { User } from '../models/user.model'
 import { CreateRequest } from '../models/user.model'
+import { PaginatedUsersResponse } from '../models/user.model'  // 👈 NOVO
 
 
 @Injectable({
-  providedIn: 'root' //Significa que o serviço será injetado no root do projeto, ou seja, em qualquer lugar do projeto podemos usar ele
+  providedIn: 'root'
 })
 
 export class UserService {
@@ -25,9 +26,11 @@ export class UserService {
     getUserByEmail(userEmail: string): Observable<User> {
         return this.http.get<User>(`${this.apiUrl}/getUserByEmail/${userEmail}`)
     }
-    getAllUsers(): Observable<User[]> {
-        return this.http.get<User[]>(`${this.apiUrl}/getAllUsers`)
+
+    getAllUsers(page: number = 1, pageSize: number = 10): Observable<PaginatedUsersResponse> {
+        return this.http.get<PaginatedUsersResponse>(`${this.apiUrl}/getAllUsers?page=${page}&pageSize=${pageSize}`)
     }
+
     updateUser(userId: number, user: Omit<User, 'id'>): Observable<User> {
         return this.http.put<User>(`${this.apiUrl}/updateUser/${userId}`, user)
     }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/RafaelFleitas/API-Golang/src/configuration/logger"
 	"github.com/RafaelFleitas/API-Golang/src/configuration/rest_err"
+	"github.com/RafaelFleitas/API-Golang/src/controller/model/response"
 	"github.com/RafaelFleitas/API-Golang/src/view"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -100,11 +101,13 @@ func (uc *userControllerInterface) FindUserByEmail(c *gin.Context) {
 
 // FindAllUsers godoc
 // @Summary Lista todos os usuários
-// @Description Retorna a lista completa de usuários cadastrados
+// @Description Retorna a lista paginada de usuários cadastrados
 // @Tags users
 // @Produce json
+// @Param page query int false "Número da página (padrão: 1)"
+// @Param pageSize query int false "Itens por página (padrão: 10)"
 // @Security BearerAuth
-// @Success 200 {array} response.UserResponse
+// @Success 200 {object} response.PaginatedUsersResponse
 // @Failure 401 {object} rest_err.RestErr
 // @Router /getAllUsers [get]
 func (uc *userControllerInterface) FindAllUsers(c *gin.Context) {
@@ -112,15 +115,33 @@ func (uc *userControllerInterface) FindAllUsers(c *gin.Context) {
 		zap.String("journey", "FindAllUsers"),
 	)
 
-	usersDomain, err := uc.service.FindAllUsersService()
-	if err != nil {
-		c.JSON(err.Code, err)
+	page, err := strconv.ParseInt(c.DefaultQuery("page", "1"), 10, 64)
+	if err != nil || page < 1 {
+		page = 1
+	}
+
+	pageSize, err := strconv.ParseInt(c.DefaultQuery("pageSize", "10"), 10, 64)
+	if err != nil || pageSize < 1 {
+		pageSize = 10
+	}
+
+	usersDomain, total, restErr := uc.service.FindAllUsersService(page, pageSize)
+	if restErr != nil {
+		c.JSON(restErr.Code, restErr)
 		return
 	}
+
+	totalPages := (total + pageSize - 1) / pageSize
 
 	logger.Info("FindAllUsersController successfully executed",
 		zap.String("journey", "FindAllUsers"),
 	)
 
-	c.JSON(http.StatusOK, view.ConvertDomainListToResponse(usersDomain))
+	c.JSON(http.StatusOK, response.PaginatedUsersResponse{
+		Users:      view.ConvertDomainListToResponse(usersDomain),
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: totalPages,
+	})
 }
