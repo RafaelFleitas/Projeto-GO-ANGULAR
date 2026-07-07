@@ -20,16 +20,6 @@ func (r *RestErr) Error() string {
 	return r.Message
 }
 
-// NewRestErr é um construtor para criar um novo RestErr com todos os campos.
-func NewRestErr(message, err string, code int, causes []Causes) *RestErr {
-	return &RestErr{
-		Message: message,
-		Err:     err,
-		Code:    code,
-		Causes:  causes,
-	}
-}
-
 // NewBadRequestError cria um erro padronizado para "Bad Request" (Requisição Inválida).
 func NewBadRequestError(message string) *RestErr {
 	return &RestErr{

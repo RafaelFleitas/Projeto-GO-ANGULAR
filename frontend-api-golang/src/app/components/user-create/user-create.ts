@@ -5,9 +5,6 @@ import { UserService } from '../../services/user.services';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
 
-
-
-
 @Component({
   selector: 'app-user-create',
   imports: [FormsModule],

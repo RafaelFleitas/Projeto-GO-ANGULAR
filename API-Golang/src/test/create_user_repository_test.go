@@ -6,8 +6,6 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 )
 
-const ORACLE_URL = "ORACLE_URL"
-
 func TestUserRepository_CreateUser(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	if err != nil {

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router'
 import { AuthService } from '../../services/auth'
 import { User } from '../../models/user.model'
@@ -7,7 +6,7 @@ import { User } from '../../models/user.model'
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

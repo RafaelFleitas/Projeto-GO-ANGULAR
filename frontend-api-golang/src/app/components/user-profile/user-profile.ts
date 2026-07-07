@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router'
 import { AuthService } from '../../services/auth'
 import { User } from '../../models/user.model'
@@ -9,7 +8,7 @@ import { HttpClient } from '@angular/common/http'
 
 @Component({
   selector: 'app-user-profile',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './user-profile.html',
   styleUrl: './user-profile.css',
 })
@@ -67,7 +66,7 @@ export class UserProfile implements OnInit {
       this.notificationService.warning('Selecione uma imagem antes de salvar')
       return
     }
-    this.isLoading.set(true)   // 👈 antes era: this.isLoading = true
+    this.isLoading.set(true)
 
     const formData = new FormData()
     formData.append('avatar', this.selectedFile)
@@ -77,13 +76,13 @@ export class UserProfile implements OnInit {
         this.currentUser!.profileImage = response.url
         localStorage.setItem('current_user', JSON.stringify(this.currentUser))
         this.notificationService.success('Foto atualizada com sucesso!')
-        this.isLoading.set(false)   // 👈 antes era: this.isLoading = false
+        this.isLoading.set(false)
         this.resetForm()
       },
       error: (err) => {
         console.error('Error ao salvar: ', err)
         this.notificationService.error('Erro ao salvar imagem')
-        this.isLoading.set(false)   // 👈 antes era: this.isLoading = false
+        this.isLoading.set(false)
       }
     })
   }

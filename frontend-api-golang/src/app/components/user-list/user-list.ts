@@ -1,5 +1,4 @@
 import { Component, OnInit, signal, computed } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router'
 import { UserService } from '../../services/user.services'
 import { User } from '../../models/user.model'
@@ -8,7 +7,7 @@ import { NotificationService } from '../../services/notification.service'
 
 @Component({
   selector: 'app-user-list',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './user-list.html',
   styleUrl: './user-list.css'
 })

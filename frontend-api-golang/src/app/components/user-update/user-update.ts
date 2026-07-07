@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { Router, ActivatedRoute } from '@angular/router'
 import { FormsModule } from '@angular/forms'
 import { UserService } from '../../services/user.services'
@@ -9,7 +8,7 @@ import { NotificationService } from '../../services/notification.service'
 
 @Component({
   selector: 'app-user-update',
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './user-update.html',
   styleUrl: './user-update.css',
 })
