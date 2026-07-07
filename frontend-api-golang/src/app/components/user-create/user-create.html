@@ -1,36 +1,36 @@
-<div class="min-h-screen bg-gray-100">
+<div class="min-h-screen bg-gray-950">
 
     <!-- Navbar -->
-    <nav class="bg-white shadow-lg">
-      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-gray-600 ">Criar Usuário</h1>
+    <nav class="bg-black shadow-xl border-b border-gray-600">
+      <div class="max-w-screen-2xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-white">Criar Usuário</h1>
         <button (click)="goToDashboard()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition cursor-pointer">
         Voltar
       </button>
       </div>
     </nav>
 
-    
+
     <div class= "max-w-2xl mx-auto px-4 py-12">
         @if(errorMessage()){
-            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4">
+            <div class="bg-red-950/50 border border-red-800 text-red-300 px-4 py-3 rounded-lg text-sm mb-4">
                 {{errorMessage()}}
             </div>
         }
 
 
     <!-- Formulário -->
-    <div class="bg-white rounded-lg shadow-lg p-8">
+    <div class="bg-gray-900 rounded-lg shadow-lg p-8">
       <form (ngSubmit)="createUser()" class="space-y-6">
         <!-- Nome -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Nome</label>
+          <label class="block text-sm font-medium text-gray-200 mb-2">Nome</label>
           <input
             type="text"
             [value]="userName()"
             (input)="userName.set($event.target.value)"
             name="name"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Digite o nome"
             required
           />
@@ -38,13 +38,13 @@
 
         <!-- Email -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+          <label class="block text-sm font-medium text-gray-200 mb-2">Email</label>
           <input
             type="email"
             [value]="userEmail()"
             (input)="userEmail.set($event.target.value)"
             name="email"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Digite o email"
             required
           />
@@ -52,26 +52,26 @@
 
         <!-- Senha -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Senha</label>
+          <label class="block text-sm font-medium text-gray-200 mb-2">Senha</label>
           <input
             type="password"
             [value]="userPassword()"
             (input)="userPassword.set($event.target.value)"
             name="password"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Mínimo 6 caracteres, com um símbolo (!@#$%*)"
             required
           />
         </div>
         <!-- Confirmar Senha -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Confirmar Senha</label>
+          <label class="block text-sm font-medium text-gray-200 mb-2">Confirmar Senha</label>
           <input
             type="password"
             name="passwordConfirm"
             [value]="userPasswordConfirm()"
             (input)="userPasswordConfirm.set($event.target.value)"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Digite a senha novamente"
             required
           />
@@ -79,13 +79,13 @@
 
         <!-- Idade -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Idade</label>
+          <label class="block text-sm font-medium text-gray-200 mb-2">Idade</label>
           <input
             type="number"
             [value]="userAge()"
             (input)="userAge.set($event.target.value)"
             name="age"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 text-white placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Digite a idade"
             required
           />
@@ -96,7 +96,7 @@
           <button
             type="button"
             (click)="goToDashboard()"
-            class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition cursor-pointer"
+            class="flex-1 px-4 py-2 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition cursor-pointer"
           >
             Cancelar
           </button>
