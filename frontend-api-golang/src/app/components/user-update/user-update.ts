@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms'
 import { UserService } from '../../services/user.services'
 import { User } from '../../models/user.model'
 import { NotificationService } from '../../services/notification.service'
+import { AuthService } from '../../services/auth'
+
 
 
 @Component({
@@ -22,12 +24,17 @@ export class UserUpdate implements OnInit {
 
   constructor(
     private userService: UserService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login'])
+    }
+
     this.route.params.subscribe((params) => {
       this.userId = params['id']
       if (this.userId) {

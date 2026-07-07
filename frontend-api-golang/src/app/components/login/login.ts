@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core'
+import { Component, signal, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService } from '../../services/auth'
@@ -19,6 +19,12 @@ export class Login {
     private authService: AuthService,
     private router: Router,
   ){}
+
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/dashboard'])
+    }
+  }
 
   onLogin(){
     if(!this.email || !this.password){

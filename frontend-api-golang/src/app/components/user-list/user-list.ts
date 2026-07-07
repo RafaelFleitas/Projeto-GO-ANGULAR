@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { UserService } from '../../services/user.services'
 import { User } from '../../models/user.model'
 import { NotificationService } from '../../services/notification.service'
+import { AuthService } from '../../services/auth'
 
 
 @Component({
@@ -36,12 +37,16 @@ export class UserList implements OnInit {
   })
 
   constructor(
+    private authService: AuthService,
     private userService: UserService,
     private router: Router,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login'])
+    }
     this.loadUsers()
   }
 

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { signal } from '@angular/core';
 import { UserService } from '../../services/user.services';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification.service';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-user-create',
@@ -22,9 +23,16 @@ export class UserCreate {
 
   constructor(
     private router: Router,
+    private authService: AuthService,
     private userService: UserService,
     private notificationService: NotificationService
   ) { }
+
+  ngOnInit(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login'])
+    }
+  }
 
   createUser(){
     if (!this.validarFormulario() || !this.passwordConfirm()){
