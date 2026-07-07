@@ -4,6 +4,7 @@ import { Router } from '@angular/router'
 import { AuthService } from '../../services/auth'
 import { User } from '../../models/user.model'
 
+
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule],
@@ -13,6 +14,8 @@ import { User } from '../../models/user.model'
 
 export class Dashboard implements OnInit {
   currentUser: User | null = null
+  isMenuOpen = false
+
 
   constructor(
     private authService: AuthService,
@@ -29,13 +32,30 @@ export class Dashboard implements OnInit {
     }
   }
 
+  //Funções do menu
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false
+  }
+
+  goToProfile() {
+    this.closeMenu()
+    this.router.navigate(['/profile'])
+  }
+
   logout() {
     this.authService.logout()
     this.router.navigate(['/login'])
   }
 
-  //Novas funções para navegação
+  getProfileImage(): string {
+    return this.currentUser?.profileImage || 'assets/default-avatar.png'
+  }
 
+  //Funções da grid
   goToUserList() {
     this.router.navigate(['/users'])
   }

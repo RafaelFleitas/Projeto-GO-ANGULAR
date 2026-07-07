@@ -4,6 +4,7 @@ import { Dashboard } from './components/dashboard/dashboard';
 import { UserList } from './components/user-list/user-list';
 import { UserUpdate } from './components/user-update/user-update';
 import { UserCreate } from './components/user-create/user-create';
+import { UserProfile } from './components/user-profile/user-profile';
 
 
 export const routes: Routes = [
@@ -38,6 +39,12 @@ export const routes: Routes = [
         component: UserCreate,
         title: 'Create'
     },
+    {
+        path: 'profile',
+        component: UserProfile,
+        title: 'Profile'
+    }
+
     
     
     

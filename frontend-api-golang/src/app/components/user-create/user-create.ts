@@ -18,6 +18,7 @@ export class UserCreate {
   userName = signal('')
   userEmail = signal('')
   userPassword = signal('')
+  userPasswordConfirm = signal('')
   userAge = signal('')
   isLoading = signal(false)
   errorMessage = signal('')
@@ -29,7 +30,7 @@ export class UserCreate {
   ) { }
 
   createUser(){
-    if (!this.validarFormulario()){
+    if (!this.validarFormulario() || !this.passwordConfirm()){
       return
     }
 
@@ -75,6 +76,17 @@ export class UserCreate {
     }
     return true
 
+  }
+
+  passwordConfirm(){
+    const senha = this.userPassword()
+    const confirmacao = this.userPasswordConfirm()
+
+    if (senha !== confirmacao){
+      this.errorMessage.set('As senhas não conferem')
+      return false
+    }
+    return true
   }
 
 
