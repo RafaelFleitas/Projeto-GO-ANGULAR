@@ -27,8 +27,9 @@ export class UserService {
         return this.http.get<User>(`${this.apiUrl}/getUserByEmail/${userEmail}`)
     }
 
-    getAllUsers(page: number = 1, pageSize: number = 10): Observable<PaginatedUsersResponse> {
-        return this.http.get<PaginatedUsersResponse>(`${this.apiUrl}/getAllUsers?page=${page}&pageSize=${pageSize}`)
+    getAllUsers(page: number = 1, pageSize: number = 10, search: string = ''): Observable<PaginatedUsersResponse> {
+        const searchParam = search ? `&search=${search}` : ''
+        return this.http.get<PaginatedUsersResponse>(`${this.apiUrl}/getAllUsers?page=${page}&pageSize=${pageSize}${searchParam}`)
     }
 
     updateUser(userId: number, user: Omit<User, 'id'>): Observable<User> {

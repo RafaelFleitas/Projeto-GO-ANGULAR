@@ -125,7 +125,9 @@ func (uc *userControllerInterface) FindAllUsers(c *gin.Context) {
 		pageSize = 10
 	}
 
-	usersDomain, total, restErr := uc.service.FindAllUsersService(page, pageSize)
+	search := c.Query("search")
+
+	usersDomain, total, restErr := uc.service.FindAllUsersService(page, pageSize, search)
 	if restErr != nil {
 		c.JSON(restErr.Code, restErr)
 		return

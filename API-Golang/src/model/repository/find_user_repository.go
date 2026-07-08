@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"strings"
 
 	"github.com/RafaelFleitas/API-Golang/src/configuration/logger"
 	"github.com/RafaelFleitas/API-Golang/src/configuration/rest_err"
@@ -104,18 +105,34 @@ func (ur *userRepository) FindUserByEmailAndPasswordRepository(email, password s
 
 }
 
-func (ur *userRepository) FindAllUsersRepository(page, pageSize int64) ([]model.UserDomainInterface, int64, *rest_err.RestErr) {
+func (ur *userRepository) FindAllUsersRepository(page, pageSize int64, search string) ([]model.UserDomainInterface, int64, *rest_err.RestErr) {
 	logger.Info("Init FindAllUsers user repository")
 
 	offset := (page - 1) * pageSize
 
-	rows, err := ur.databaseConnection.QueryContext(
-		context.Background(),
-		"SELECT id, name, email, password, age, avatar_url FROM users ORDER BY id OFFSET :1 ROWS FETCH NEXT :2 ROWS ONLY",
-		offset,
-		pageSize,
-	)
+	baseQuery := "SELECT id, name, email, password, age, avatar_url FROM users"
+	baseCountQuery := "SELECT COUNT(*) FROM users"
 
+	var query, countQuery string
+	var queryArgs, countArgs []interface{}
+
+	if search != "" {
+		searchPattern := "%" + strings.ToLower(search) + "%"
+
+		query = baseQuery + " WHERE LOWER(name) LIKE :1 OR LOWER(email) LIKE :2 ORDER BY id OFFSET :3 ROWS FETCH NEXT :4 ROWS ONLY"
+		queryArgs = []interface{}{searchPattern, searchPattern, offset, pageSize}
+
+		countQuery = baseCountQuery + " WHERE LOWER(name) LIKE :1 OR LOWER(email) LIKE :2"
+		countArgs = []interface{}{searchPattern, searchPattern}
+	} else {
+		query = baseQuery + " ORDER BY id OFFSET :1 ROWS FETCH NEXT :2 ROWS ONLY"
+		queryArgs = []interface{}{offset, pageSize}
+
+		countQuery = baseCountQuery
+		countArgs = []interface{}{}
+	}
+
+	rows, err := ur.databaseConnection.QueryContext(context.Background(), query, queryArgs...)
 	if err != nil {
 		logger.Error("Error trying to find all users", err)
 		return nil, 0, rest_err.NewInternalServerError("Error trying to find all users")
@@ -136,10 +153,7 @@ func (ur *userRepository) FindAllUsersRepository(page, pageSize int64) ([]model.
 	}
 
 	var total int64
-	countRow := ur.databaseConnection.QueryRowContext(
-		context.Background(),
-		"SELECT COUNT(*) FROM users",
-	)
+	countRow := ur.databaseConnection.QueryRowContext(context.Background(), countQuery, countArgs...)
 
 	if err := countRow.Scan(&total); err != nil {
 		logger.Error("Error trying to count users", err)

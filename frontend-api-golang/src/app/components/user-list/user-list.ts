@@ -24,18 +24,6 @@ export class UserList implements OnInit {
   total = signal(0)
   totalPages = signal(0)
 
-  filteredUsers = computed(() => {
-    const term = this.searchTerm().trim().toLowerCase()
-
-    if (!term) {
-      return this.users()
-    }
-
-    return this.users().filter(user =>
-      user.name.toLowerCase().includes(term) || user.email.toLowerCase().includes(term)
-    )
-  })
-
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -50,10 +38,10 @@ export class UserList implements OnInit {
     this.loadUsers()
   }
 
-  loadUsers() {
+    loadUsers() {
     this.isLoading.set(true)
 
-    this.userService.getAllUsers(this.currentPage(), this.pageSize()).subscribe({
+    this.userService.getAllUsers(this.currentPage(), this.pageSize(), this.searchTerm()).subscribe({
       next: (response) => {
         this.users.set(response.users)
         this.total.set(response.total)
@@ -84,7 +72,10 @@ export class UserList implements OnInit {
   onSearchChange(event: Event) {
     const value = (event.target as HTMLInputElement).value
     this.searchTerm.set(value)
+    this.currentPage.set(1)
+    this.loadUsers()
   }
+
 
   goToDashboard() {
     this.router.navigate(['/dashboard'])
