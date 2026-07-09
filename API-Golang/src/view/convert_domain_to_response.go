@@ -18,12 +18,12 @@ func ConvertDomainToResponse(userDomain model.UserDomainInterface) response.User
 	}
 }
 
-func buildAvatarURL(avatarPath string) string {
-	if avatarPath == "" {
+func buildAvatarURL(avatarFileName string) string {
+	if avatarFileName == "" {
 		return ""
 	}
 	baseURL := os.Getenv("API_BASE_URL")
-	return fmt.Sprintf("%s%s", baseURL, avatarPath)
+	return fmt.Sprintf("%s%s%s", baseURL, model.AvatarPublicPath, avatarFileName)
 }
 
 func ConvertDomainListToResponse(usersDomain []model.UserDomainInterface) []response.UserResponse {

@@ -11,6 +11,9 @@ type userDomain struct {
 	avatarURL string
 }
 
+const AvatarUploadDir = "./uploads/user-avatars/"
+const AvatarPublicPath = "/uploads/user-avatars/"
+
 // Getters/Setters — única forma de ler os dados do usuário fora desse pacote
 func (ud *userDomain) GetEmail() string    { return ud.email }
 func (ud *userDomain) GetPassword() string { return ud.password }
